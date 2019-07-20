@@ -18,10 +18,13 @@
                     @endcan
 
                 </div>
-                <div class="card-body bg-info">
+                <div class="card-body">
+                    {{--filtering--}}
+                    <input type="text" id="myInput" placeholder="Search for everything.."
+                           title="Type in a name">
                     {{--tabel for show list of motorbike--}}
-                    <table class="table table-striped">
-                        <tr>
+                    <table class="table table-striped" id="myTable">
+                        <tr class="header">
                             <th>id</th>
                             <th>make</th>
                             <th>model</th>
@@ -52,8 +55,9 @@
                                             <i class="fa fa-edit fa-2x"></i>
                                         </a>
                                         @include("admin.motorbike.partials.editModal" ,["motorbike"=>$motorbike])
-                                        <a href="#" onclick="motorbikeDelete({{$motorbike->id}})"><i
-                                                    class="fa fa-trash fa-2x text-danger"></i></a>
+                                        <a href="#" onclick="motorbikeDelete({{$motorbike->id}})">
+                                            <i class="fa fa-trash fa-2x text-danger"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -71,24 +75,44 @@
 
 @push("js")
     <script>
-        function motorbikeDelete() {
+        function motorbikeDelete(id) {
             swal({
                 title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this imaginary file!",
+                text: "your data is delete forever!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
             })
                 .then((willDelete) => {
                     if (willDelete) {
-
-                        swal("Poof! Your imaginary file has been deleted!", {
-                            icon: "success",
+                        $.ajax({
+                            url: "{{route("motorbike.delete")}}",
+                            type: "POST",
+                            data: {
+                                id: id
+                            },
+                            dataType: "html",
+                            success: function () {
+                                swal("Done!", "It was succesfully deleted!", "success");
+                                location.reload(true)
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                swal("Error deleting!", "Please try again", "error");
+                            }
                         });
                     } else {
                         swal("Your imaginary file is safe!");
                     }
                 });
         }
+
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
     </script>
 @endpush

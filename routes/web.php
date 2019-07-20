@@ -22,7 +22,7 @@ Route::group(["prefix" => "/motorbike", "namespace" => "admin"], function () {
     Route::get('/index', 'motorbikeController@index')->name('motorbike.list');
     Route::post('/store', 'motorbikeController@store')->name('motorbike.store')->middleware("admin");
     Route::post('/update/{id}', 'motorbikeController@update')->name('motorbike.update');
-    Route::get('/delete/{id}', 'motorbikeController@delete')->name('motorbike.delete');
+    Route::post('/delete', 'motorbikeController@delete')->name('motorbike.delete');
 });
 Auth::routes();
 

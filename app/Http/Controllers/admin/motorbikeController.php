@@ -58,10 +58,11 @@ class motorbikeController extends Controller
         return redirect()->route("motorbike.list")->withUpdateMsg("your data successfully updated");
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
+        $id=$request->input("id");
         $motorbike = motorbike::findorfail($id);
         $motorbike->delete();
-        return redirect()->back();
+        return redirect()->back()->with(["successDeleteMessage"=> "your data is successfully deleted"]);
     }
 }

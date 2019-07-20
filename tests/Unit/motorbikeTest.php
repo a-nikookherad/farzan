@@ -15,7 +15,7 @@ class motorbikeTest extends TestCase
      */
     public function test_Motorbike_create()
     {
+        $this->assertTrue(true);
 
-//        $this->assertTrue(true);
     }
 }
